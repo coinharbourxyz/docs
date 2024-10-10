@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algorithmic Trading IDE Documentation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+        }
+        .content {
+            flex: 1;
+            max-width: 800px;
+            padding-right: 40px;
+        }
+        .navbar {
+            width: 250px;
+            position: sticky;
+            top: 20px;
+            align-self: flex-start;
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .navbar ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .navbar ul ul {
+            padding-left: 20px;
+        }
+        .navbar a {
+            text-decoration: none;
+            color: #333;
+        }
+        .navbar a:hover {
+            color: #007bff;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        code {
+            background-color: #f4f4f4;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            display: block;
+            padding: 10px;
+            white-space: pre-wrap;
+        }
+        .method {
+            margin-bottom: 30px;
+        }
+        .method h3 {
+            margin-bottom: 10px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <h1 id="top">Exponential Markets Dev Documentation</h1>
+
+        <h2 id="callback-functions">Callback Functions</h2>
+
+        <div class="method">
+            <h3 id="init">__init__(self, trading_interface: TradingInterface)</h3>
+            <p>Initializes the algorithm with the trading interface.</p>
+        </div>
+
+        <div class="method">
+            <h3 id="on_ticker_recd">on_ticker_recd(self, ticker_data)</h3>
+            <p>Called when a new ticker data is received. The <code>ticker_data</code> object contains fields as described in the <a href="#dataset-fields">Dataset Fields</a> section.</p>
+        </div>
+
+        <div class="method">
+            <h3 id="on_algo_start">on_algo_start(self)</h3>
+            <p>Called when the algorithm starts.</p>
+        </div>
+
+        <div class="method">
+            <h3 id="on_algo_stop">on_algo_stop(self)</h3>
+            <p>Called when the algorithm stops.</p>
+        </div>
+
+        <div class="method">
+            <h3 id="on_order_success">on_order_success(self)</h3>
+            <p>Called when an order is successfully executed.</p>
+        </div>
+
+        <div class="method">
+            <h3 id="on_order_error">on_order_error(self, error)</h3>
+            <p>Called when an error occurs during order execution.</p>
+        </div>
+
+        <h2 id="dataset-fields">Dataset Fields</h2>
+        <p>The ticker_data object contains the following fields:</p>
+        <table>
+            <tr>
+                <th>Field</th>
+                <th>Type</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>open</td>
+                <td>float</td>
+                <td>Opening price</td>
+            </tr>
+            <tr>
+                <td>close</td>
+                <td>float</td>
+                <td>Closing price</td>
+            </tr>
+            <tr>
+                <td>high</td>
+                <td>float</td>
+                <td>Highest price</td>
+            </tr>
+            <tr>
+                <td>low</td>
+                <td>float</td>
+                <td>Lowest price</td>
+            </tr>
+            <tr>
+                <td>volume</td>
+                <td>float</td>
+                <td>Trading volume</td>
+            </tr>
+            <tr>
+                <td>date_time</td>
+                <td>string in ISO 8601 format</td>
+                <td>Time of the data point</td>
+            </tr>
+        </table>
+
+        <h2 id="helper-methods">Helper Methods</h2>
+
+        <div class="method">
+            <h3 id="buy">buy(orderType: str, price: float = None)</h3>
+            <p>Buys ETH with all available USDC.</p>
+            <h4>Input Parameters:</h4>
+            <ul>
+                <li><strong>orderType</strong> (string): The type of order to buy ('market' or 'limit').</li>
+                <li><strong>price</strong> (float, optional): The price to buy at (only used for limit orders).</li>
+            </ul>
+            <h4>Output:</h4>
+            <p>void</p>
+            <code>self.trading_interface.buy(order_type="market")</code>
+        </div>
+
+        <div class="method">
+            <h3 id="sell">sell(orderType: str, price: float = None)</h3>
+            <p>Sells all available ETH for USDC.</p>
+            <h4>Input Parameters:</h4>
+            <ul>
+                <li><strong>orderType</strong> (string): The type of order to sell ('market' or 'limit').</li>
+                <li><strong>price</strong> (float, optional): The price to sell at (only used for limit orders).</li>
+            </ul>
+            <h4>Output:</h4>
+            <p>void</p>
+            <code>self.trading_interface.sell(order_type="limit", price=ticker_data["close"])</code>
+        </div>
+
+        <div class="method">
+            <h3 id="get_current_balance">get_current_balance(asset: str)</h3>
+            <p>Retrieves the current balance of a specified asset.</p>
+            <h4>Input Parameters:</h4>
+            <ul>
+                <li><strong>asset</strong> (string): The asset to get the balance of (either 'usdc' or 'eth').</li>
+            </ul>
+            <h4>Output:</h4>
+            <p>float</p>
+            <code>balance = self.trading_interface.helper.get_current_balance("eth")</code>
+        </div>
+    </div>
+    <nav class="navbar">
+        <h3>Contents</h3>
+        <ul>
+            <li><a href="#top">Algorithmic Trading IDE Documentation</a></li>
+            <li>
+                <a href="#callback-functions">Callback Functions</a>
+                <ul>
+                    <li><a href="#init">__init__</a></li>
+                    <li><a href="#on_ticker_recd">on_ticker_recd</a></li>
+                    <li><a href="#on_algo_start">on_algo_start</a></li>
+                    <li><a href="#on_algo_stop">on_algo_stop</a></li>
+                    <li><a href="#on_order_success">on_order_success</a></li>
+                    <li><a href="#on_order_error">on_order_error</a></li>
+                </ul>
+            </li>
+            <li><a href="#dataset-fields">Dataset Fields</a></li>
+            <li>
+                <a href="#helper-methods">Helper Methods</a>
+                <ul>
+                    <li><a href="#buy">buy</a></li>
+                    <li><a href="#sell">sell</a></li>
+                    <li><a href="#get_current_balance">get_current_balance</a></li>
+                </ul>
+            </li>
+            <li>
+                <br/>
+                <p class="text-center">Last Updated: 2024-07-23</p>
+            </li>
+        </ul>
+    </nav>
+</body>
+</html>
