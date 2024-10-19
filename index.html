@@ -123,6 +123,12 @@
             </li>
             <li><a href="#transaction-fees">Transaction Fees</a></li>
             <li>
+                <a href="#sample-algorithms">Sample Algorithms</a>
+                <ul>
+                    <li><a href="#simple-moving-average">SME</a></li>
+                </ul>
+            </li>
+            <li>
                 <br/>
                 <p class="text-center">Last Updated: 2024-07-23</p>
             </li>
@@ -245,11 +251,49 @@
             <p>float</p>
             <code>balance = self.trading_interface.helper.get_current_balance("eth")</code>
         </div>
+
         <h2 id="transaction-fees">Pricing</h2>
         <p>Transaction fees for each trade is approximately <b>0.0015USD</b> (INR 0.13) </p>
-        <div class="">
+     
+        <h2 id="sample-algorithms">Sample Algorithms</h2>
+        <div class="method">
+            <h3 id="simple-moving-average">Simple Moving Average</h3>
+            <code>
+from interface import TradingInterface
 
-        </div>
+class MyAlgorithm:
+    def __init__(self, trading_interface: TradingInterface):
+        self.trading_interface = trading_interface
+        self.prices = []  # Store the last 5 prices
+
+    def on_ticker_recd(self, ticker_data):
+        current_price = ticker_data["close"]  # Fetch the current price
+        self.prices.append(current_price)  # Add the new price to the list
+
+        if len(self.prices) > 5:
+            self.prices.pop(0)
+
+        if len(self.prices) == 5: 
+            sma_5 = sum(self.prices) / 5 # Calculate 5 day average
+        
+            if current_price > sma_5:
+                self.trading_interface.buy(order_type="market")
+            else:
+                self.trading_interface.sell(order_type="market")
+        
+    def on_algo_start(self):
+        print("Algorithm started")
+
+    def on_algo_stop(self):
+        print("Algorithm stopped")
+    
+    def on_order_success(self):
+        print("Order was successful")
+
+    def on_order_error(self, error):
+        print(f"Order was unsuccessful: {error}")
+    </code>
+        </div>     
     </div>
     <div class="libraries">
         <h2 id="available-libraries">Available Libraries</h2>
