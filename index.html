@@ -8,7 +8,8 @@
         body {
             font-family: Arial, sans-serif;
             line-height: 1.6;
-            color: #333;
+            color: #e0e0e0;
+            background-color: #1a1a1a;
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
@@ -24,11 +25,11 @@
             position: sticky;
             top: 20px;
             align-self: flex-start;
-            background-color: #f8f9fa;
+            background-color: #2c2c2c;
             padding: 20px;
             border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            margin-right: 20px; /* Add margin to separate from content */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            margin-right: 20px;
         }
         .navbar ul {
             list-style-type: none;
@@ -39,21 +40,22 @@
         }
         .navbar a {
             text-decoration: none;
-            color: #333;
+            color: #b0b0b0;
         }
         .navbar a:hover {
-            color: #007bff;
+            color: #ffffff;
         }
         h1, h2, h3 {
-            color: #2c3e50;
+            color: #ffffff;
         }
         code {
-            background-color: #f4f4f4;
-            border: 1px solid #ddd;
+            background-color: #2c2c2c;
+            border: 1px solid #444;
             border-radius: 4px;
             display: block;
             padding: 10px;
             white-space: pre-wrap;
+            color: #66d9ef;
         }
         .method {
             margin-bottom: 30px;
@@ -66,41 +68,48 @@
             width: 100%;
         }
         th, td {
-            border: 1px solid #ddd;
+            border: 1px solid #444;
             padding: 8px;
             text-align: left;
         }
         th {
-            background-color: #f2f2f2;
+            background-color: #2c2c2c;
         }
         .contact {
-            margin-top: 20px; /* Add margin to separate from navbar */
+            margin-top: 20px;
             padding-right: 10px;
             padding-left: 10px;
             text-align: left;
-            background-color: #ddd; /* Optional: background color for contact section */
+            background-color: #2c2c2c;
             border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
         }
         .libraries {
             position: sticky;
             top: 20px;
-            flex: 1; /* Allow libraries section to take remaining space */
-            max-width: 250px; /* Reduced width for libraries */
+            flex: 1;
+            max-width: 250px;
             padding-right: 20px;
             padding-left: 20px;
-            background-color: #f8f9fa; /* Optional: background color for libraries section */
+            background-color: #2c2c2c;
             border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
             height: 100%;
+        }
+        a {
+            color: #4da6ff;
+        }
+        a:hover {
+            color: #66b3ff;
         }
     </style>
 </head>
 <body>
     <nav class="navbar">
-        <h3>Contents</h3>
+        <h3>Exponential Markets</h3>
         <ul>
-            <li><a href="#top">Algorithmic Trading IDE Documentation</a></li>
+            <li><a href="#top">Go to Top</a></li>
+            <li><a href="#assets-supported">Assets Supported</a></li>
             <li>
                 <a href="#callback-functions">Callback Functions</a>
                 <ul>
@@ -116,9 +125,11 @@
             <li>
                 <a href="#helper-methods">Helper Methods</a>
                 <ul>
-                    <li><a href="#buy">buy</a></li>
-                    <li><a href="#sell">sell</a></li>
-                    <li><a href="#get_current_balance">get_current_balance</a></li>
+                    <li><a href="#open_position">open_position</a></li>
+                    <li><a href="#close_position">close_position</a></li>
+                    <li><a href="#get_usd_balance">get_usd_balance</a></li>
+                    <li><a href="#get_open_positions">get_open_positions</a></li>
+                    <li><a href="#get_previous_tickers">get_previous_tickers</a></li>
                 </ul>
             </li>
             <li>
@@ -132,16 +143,177 @@
     </nav>
     <div class="content">
         <h1 id="top">Exponential Markets Dev Documentation</h1>
+        <p>Welcome to the Exponential Markets developer documentation. Here you can find information on the callback functions, helper methods, and dataset fields for the Exponential Markets algorithmic trading platform. Want a feature added? <a href="mailto:contact@exponential.markets">Email us here</a> and we'll add it ASAP.</p>
+
+        <h2 id="assets-supported">Assets Supported</h2>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Symbol</th>
+                <th>TradingView Link</th>
+                <th>Years of Data Available</th>
+            </tr>
+            <tr>
+                <td>AAVE</td>
+                <td>AAVE</td>
+                <td><a target="_blank" href="https://www.tradingview.com/symbols/AAVEUSD/">View</a></td>
+                <td>3</td>
+            </tr>
+            <tr>
+                <td>APE</td>
+                <td>APE</td>
+                <td><a target="_blank" href="https://www.tradingview.com/symbols/APEUSD/">View</a></td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>ARB</td>
+                <td>ARB</td>
+                <td><a target="_blank" href="https://www.tradingview.com/symbols/ARBUSD/">View</a></td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>ATOM</td>
+                <td>ATOM</td>
+                <td><a target="_blank" href="https://www.tradingview.com/symbols/ATOMUSD/">View</a></td>
+                <td>5</td>
+            </tr>
+            <tr>
+                <td>AVAX</td>
+                <td>AVAX</td>
+                <td><a target="_blank" href="https://www.tradingview.com/symbols/AVAXUSD/">View</a></td>
+                <td>3</td>
+            </tr>
+            <tr>
+                <td>BNB</td>
+                <td>BNB</td>
+                <td><a target="_blank" href="https://www.tradingview.com/symbols/BNBUSD/">View</a></td>
+                <td>6</td>
+            </tr>
+            <tr>
+                <td>BTC</td>
+                <td>BTC</td>
+                <td><a target="_blank" href="https://www.tradingview.com/symbols/BTCUSD/">View</a></td>
+                <td>7</td>
+            </tr>
+            <tr>
+                <td>DOGE</td>
+                <td>DOGE</td>
+                <td><a target="_blank" href="https://www.tradingview.com/symbols/DOGEUSD/">View</a></td>
+                <td>5</td>
+            </tr>
+            <tr>
+                <td>EIGEN</td>
+                <td>EIGEN</td>
+                <td><a target="_blank" href="https://www.tradingview.com/symbols/EIGENUSD/">View</a></td>
+                <td>< 1 Year</td>
+            </tr>
+            <tr>
+                <td>ETH</td>
+                <td>ETH</td>
+                <td><a target="_blank" href="https://www.tradingview.com/symbols/ETHUSD/">View</a></td>
+                <td>7</td>
+            </tr>
+            <tr>
+                <td>GMX</td>
+                <td>GMX</td>
+                <td><a target="_blank" href="https://www.tradingview.com/symbols/GMXUSD/">View</a></td>
+                <td>2</td>
+            </tr>
+            <tr>
+                <td>LINK</td>
+                <td>LINK</td>
+                <td><a target="_blank" href="https://www.tradingview.com/symbols/LINKUSD/">View</a></td>
+                <td>5</td>
+            </tr>
+            <tr>
+                <td>LTC</td>
+                <td>LTC</td>
+                <td><a target="_blank" href="https://www.tradingview.com/symbols/LTCUSD/">View</a></td>
+                <td>6</td>
+            </tr>
+            <tr>
+                <td>NEAR</td>
+                <td>NEAR</td>
+                <td><a target="_blank" href="https://www.tradingview.com/symbols/NEARUSD/">View</a></td>
+                <td>3</td>
+            </tr>
+            <tr>
+                <td>OP</td>
+                <td>OP</td>
+                <td><a target="_blank" href="https://www.tradingview.com/symbols/OPUSD/">View</a></td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>ORDI</td>
+                <td>ORDI</td>
+                <td><a target="_blank" href="https://www.tradingview.com/symbols/ORDIUSD/">View</a></td>
+                <td>< 1 Year</td>
+            </tr>
+            <tr>
+                <td>PEPE</td>
+                <td>PEPE</td>
+                <td><a target="_blank" href="https://www.tradingview.com/symbols/PEPEUSD/">View</a></td>
+                <td>< 1 Year</td>
+            </tr>
+            <tr>
+                <td>POL</td>
+                <td>POL</td>
+                <td><a target="_blank" href="https://www.tradingview.com/symbols/POLUSD/">View</a></td>
+                <td>< 1 Year</td>
+            </tr>
+            <tr>
+                <td>Ripple</td>
+                <td>XRP</td>
+                <td><a target="_blank" href="https://www.tradingview.com/symbols/XRPUSD/">View</a></td>
+                <td>5</td>
+            </tr>
+            <tr>
+                <td>SATS</td>
+                <td>SATS</td>
+                <td><a target="_blank" href="https://www.tradingview.com/symbols/SATSUSD/">View</a></td>
+                <td>< 1 Year</td>
+            </tr>
+            <tr>
+                <td>SHIB</td>
+                <td>SHIB</td>
+                <td><a target="_blank" href="https://www.tradingview.com/symbols/SHIBUSD/">View</a></td>
+                <td>3</td>
+            </tr>
+            <tr>
+                <td>Solana</td>
+                <td>SOL</td>
+                <td><a target="_blank" href="https://www.tradingview.com/symbols/SOLUSD/">View</a></td>
+                <td>3</td>
+            </tr>
+            <tr>
+                <td>STX</td>
+                <td>STX</td>
+                <td><a target="_blank" href="https://www.tradingview.com/symbols/STXUSD/">View</a></td>
+                <td>4</td>
+            </tr>
+            <tr>
+                <td>UNI</td>
+                <td>UNI</td>
+                <td><a target="_blank" href="https://www.tradingview.com/symbols/UNIUSD/">View</a></td>
+                <td>3</td>
+            </tr>
+            <tr>
+                <td>WIF</td>
+                <td>WIF</td>
+                <td><a target="_blank" href="https://www.tradingview.com/symbols/WIFUSD/">View</a></td>
+                <td>< 1 Year</td>
+            </tr>
+        </table>
 
         <h2 id="callback-functions">Callback Functions</h2>
 
         <div class="method">
-            <h3 id="init">__init__(self, trading_interface: TradingInterface)</h3>
-            <p>Initializes the algorithm with the trading interface.</p>
+            <h3 id="init">__init__(self, trading_helper: TradingHelper)</h3>
+            <p>Initializes the algorithm with the trading helper.</p>
         </div>
 
         <div class="method">
-            <h3 id="on_ticker_recd">on_ticker_recd(self, ticker_data)</h3>
+            <h3 id="on_ticker_recd">on_ticker_recd(self, ticker_data: dict)</h3>
             <p>Called when a new ticker data is received. The <code>ticker_data</code> object contains fields as described in the <a href="#dataset-fields">Dataset Fields</a> section.</p>
         </div>
 
@@ -166,12 +338,17 @@
         </div>
 
         <h2 id="dataset-fields">Dataset Fields</h2>
-        <p>The ticker_data object contains the following fields:</p>
+        <p>The <i>ticker_data</i> object contains the following fields for each asset, accessed via <code>ticker_data[asset_symbol]</code> with the below fields:</p>
         <table>
             <tr>
                 <th>Field</th>
                 <th>Type</th>
                 <th>Description</th>
+            </tr>
+            <tr>
+                <td>timestamp</td>
+                <td>int</td>
+                <td>Unix timestamp of the data point</td>
             </tr>
             <tr>
                 <td>open</td>
@@ -193,56 +370,68 @@
                 <td>float</td>
                 <td>Lowest price</td>
             </tr>
-            <tr>
-                <td>volume</td>
-                <td>float</td>
-                <td>Trading volume</td>
-            </tr>
-            <tr>
-                <td>date_time</td>
-                <td>string in ISO 8601 format</td>
-                <td>Time of the data point</td>
-            </tr>
         </table>
 
         <h2 id="helper-methods">Helper Methods</h2>
 
         <div class="method">
-            <h3 id="buy">buy(orderType: str, price: float = None)</h3>
-            <p>Buys ETH with all available USDC.</p>
+            <h3 id="open_position">open_position(asset: str, long: bool, position_size_usd: float, leverage: float, slippage_percent: float = 0.03)</h3>
+            <p>Opens a new position or adds to an existing position.</p>
             <h4>Input Parameters:</h4>
             <ul>
-                <li><strong>orderType</strong> (string): The type of order to buy ('market' or 'limit').</li>
-                <li><strong>price</strong> (float, optional): The price to buy at (only used for limit orders).</li>
+                <li><strong>asset</strong> (string): The asset to trade (e.g., "BTC", "ETH").</li>
+                <li><strong>long</strong> (boolean): True for long positions, False for short positions.</li>
+                <li><strong>position_size_usd</strong> (float): The size of the position in USD.</li>
+                <li><strong>leverage</strong> (float): The leverage to use for the position.</li>
+                <li><strong>slippage_percent</strong> (float, optional): The expected slippage as a percentage. Default is 0.03%.</li>
             </ul>
             <h4>Output:</h4>
-            <p>void</p>
-            <code>self.trading_interface.buy(order_type="market")</code>
+            <p>Position object or None if the operation fails.</p>
+            <code>position = self.trading_helper.open_position("BTC", True, 1000, 2)</code>
         </div>
 
         <div class="method">
-            <h3 id="sell">sell(orderType: str, price: float = None)</h3>
-            <p>Sells all available ETH for USDC.</p>
+            <h3 id="close_position">close_position(asset: str, long: bool, position_percent_to_close: float = 100, slippage_percent: float = 0.03)</h3>
+            <p>Closes an existing position partially or fully.</p>
             <h4>Input Parameters:</h4>
             <ul>
-                <li><strong>orderType</strong> (string): The type of order to sell ('market' or 'limit').</li>
-                <li><strong>price</strong> (float, optional): The price to sell at (only used for limit orders).</li>
+                <li><strong>asset</strong> (string): The asset to trade (e.g., "BTC", "ETH").</li>
+                <li><strong>long</strong> (boolean): True for long positions, False for short positions.</li>
+                <li><strong>position_percent_to_close</strong> (float, optional): The percentage of the position to close. Default is 100 (close entire position).</li>
+                <li><strong>slippage_percent</strong> (float, optional): The expected slippage as a percentage. Default is 0.03%.</li>
             </ul>
             <h4>Output:</h4>
-            <p>void</p>
-            <code>self.trading_interface.sell(order_type="limit", price=ticker_data["close"])</code>
+            <p>Position object or None if the operation fails.</p>
+            <code>position = self.trading_helper.close_position("BTC", True, 50)</code>
         </div>
 
         <div class="method">
-            <h3 id="get_current_balance">get_current_balance(asset: str)</h3>
-            <p>Retrieves the current balance of a specified asset.</p>
-            <h4>Input Parameters:</h4>
-            <ul>
-                <li><strong>asset</strong> (string): The asset to get the balance of (either 'usdc' or 'eth').</li>
-            </ul>
+            <h3 id="get_usd_balance">get_usd_balance()</h3>
+            <p>Retrieves the current USD balance.</p>
             <h4>Output:</h4>
             <p>float</p>
-            <code>balance = self.trading_interface.helper.get_current_balance("eth")</code>
+            <code>balance = self.trading_helper.get_usd_balance()</code>
+        </div>
+
+        <div class="method">
+            <h3 id="get_open_positions">get_open_positions()</h3>
+            <p>Retrieves all open positions.</p>
+            <h4>Output:</h4>
+            <p>Dictionary of open positions</p>
+            <code>positions = self.trading_helper.get_open_positions()</code>
+        </div>
+
+        <div class="method">
+            <h3 id="get_previous_tickers">get_previous_tickers(asset: str, previous_tickers: int)</h3>
+            <p>Retrieves previous ticker data for a specific asset.</p>
+            <h4>Input Parameters:</h4>
+            <ul>
+                <li><strong>asset</strong> (string): The asset to get data for (e.g., "BTC", "ETH").</li>
+                <li><strong>previous_tickers</strong> (int): The number of previous tickers to retrieve.</li>
+            </ul>
+            <h4>Output:</h4>
+            <p>List of dictionaries containing previous ticker data</p>
+            <code>tickers = self.trading_helper.get_previous_tickers("BTC", 5)</code>
         </div>
     </div>
     <div class="libraries">
@@ -260,7 +449,7 @@
             </tr>
             <tr>
                 <td>numpy</td>
-                <td>1.25.2</td>
+                <td>1.26.3</td>
                 <td><a href="https://numpy.org/doc/stable/">Link</a></td>
             </tr>
             <tr>
@@ -275,7 +464,7 @@
             </tr>
             <tr>
                 <td>scipy</td>
-                <td>1.11.3</td>
+                <td>1.14.0</td>
                 <td><a href="https://docs.scipy.org/doc/scipy/">Link</a></td>
             </tr>
             <tr>
@@ -315,17 +504,17 @@
             </tr>
             <tr>
                 <td>pytz</td>
-                <td>2023.3</td>
+                <td>2024.1</td>
                 <td><a href="https://pythonhosted.org/pytz/">Link</a></td>
             </tr>
             <tr>
                 <td>scikit-learn</td>
-                <td>1.3.0</td>
+                <td>1.3.1</td>
                 <td><a href="https://scikit-learn.org/stable/">Link</a></td>
             </tr>
             <tr>
                 <td>statsmodels</td>
-                <td>0.14.0</td>
+                <td>0.14.1</td>
                 <td><a href="https://www.statsmodels.org/stable/index.html">Link</a></td>
             </tr>
             <tr>
