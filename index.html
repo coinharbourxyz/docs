@@ -415,15 +415,17 @@
         <h2 id="helper-methods">Helper Methods</h2>
 
         <div class="method">
-            <h3 id="open_position">open_position(asset: str, long: bool, position_size_usd: float, leverage: float,
+            <h3 id="open_position">open_position(asset: str, long: bool, collateral_usd: float, leverage: float,
                 slippage_percent: float = 0.03)</h3>
             <p>Opens a new position or adds to an existing position.</p>
             <h4>Input Parameters:</h4>
             <ul>
                 <li><strong>asset</strong> (string): The asset to trade (e.g., "BTC", "ETH").</li>
                 <li><strong>long</strong> (boolean): True for long positions, False for short positions.</li>
-                <li><strong>position_size_usd</strong> (float): The size of the position in USD.</li>
-                <li><strong>leverage</strong> (float): The leverage to use for the position.</li>
+                <li><strong>collateral_usd</strong> (float): The amount of collateral to use for the position in USD.
+                </li>
+                <li><strong>leverage</strong> (float): The leverage to use for the position. Total Position Value =
+                    Collateral * Leverage</li>
                 <li><strong>slippage_percent</strong> (float, optional): The expected slippage as a percentage. Default
                     is 0.03%.</li>
             </ul>
