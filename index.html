@@ -569,27 +569,54 @@
         <tr>
           <td>timestamp</td>
           <td>int</td>
-          <td>Unix timestamp of the data point</td>
+          <td>Unix timestamp of the data point in seconds</td>
         </tr>
         <tr>
           <td>open</td>
           <td>float</td>
-          <td>Opening price</td>
-        </tr>
-        <tr>
-          <td>close</td>
-          <td>float</td>
-          <td>Closing price</td>
+          <td>Opening price of the asset for this time period</td>
         </tr>
         <tr>
           <td>high</td>
           <td>float</td>
-          <td>Highest price</td>
+          <td>Highest price reached during this time period</td>
         </tr>
         <tr>
           <td>low</td>
           <td>float</td>
-          <td>Lowest price</td>
+          <td>Lowest price reached during this time period</td>
+        </tr>
+        <tr>
+          <td>close</td>
+          <td>float</td>
+          <td>Closing price of the asset for this time period</td>
+        </tr>
+        <tr>
+          <td>volume</td>
+          <td>float</td>
+          <td>
+            Total trading volume in base asset units (e.g., BTC for BTC/USD)
+          </td>
+        </tr>
+        <tr>
+          <td>quote_volume</td>
+          <td>float</td>
+          <td>Total trading volume in quote currency (USD)</td>
+        </tr>
+        <tr>
+          <td>trades</td>
+          <td>int</td>
+          <td>Number of trades executed during this time period</td>
+        </tr>
+        <tr>
+          <td>taker_buy_base_volume</td>
+          <td>float</td>
+          <td>Volume of base asset bought by takers (market buyers)</td>
+        </tr>
+        <tr>
+          <td>taker_buy_quote_volume</td>
+          <td>float</td>
+          <td>Volume in quote currency (USD) bought by takers</td>
         </tr>
       </table>
 
