@@ -58,13 +58,15 @@
         color: #ffffff;
       }
 
-      code {
+      pre {
         background-color: #2c2c2c;
         border: 1px solid #444;
         border-radius: 4px;
-        display: block;
         padding: 10px;
         white-space: pre-wrap;
+        /* Preserve whitespace */
+        overflow: auto;
+        /* Add scroll if needed */
         color: #66d9ef;
       }
 
@@ -157,7 +159,12 @@
         <li>
           <a href="#sample-algorithms">Sample Algorithms</a>
           <ul>
-            <li><a href="#simple-moving-average">SME</a></li>
+            <li><a href="#sme">SME</a></li>
+            <li><a href="#rsi">RSI</a></li>
+            <li><a href="#macd">MACD</a></li>
+            <li><a href="#mac">MA Crossover</a></li>
+            <li><a href="#pt">Pairs Trading</a></li>
+            <li><a href="#bb">Bollinger Bands</a></li>
           </ul>
         </li>
         <li>
@@ -653,9 +660,24 @@
         </ul>
         <h4>Output:</h4>
         <p>Position object or None if the operation fails.</p>
-        <code
-          >position = self.trading_helper.open_position("BTC", True, 1000,
-          2)</code
+        <h4>Example:</h4>
+        <pre>
+position = self.trading_helper.open_position("BTC", True, 1000, 2)
+print(position)
+# Output:
+{
+    "chain": "arbitrum",
+    "index_token_symbol": "BTC",
+    "collateral_token_symbol": "USDC",
+    "start_token_symbol": "USDC",
+    "is_long": true,
+    "size_delta_usd": 2000.0,  # position_size_usd = collateral_usd * leverage
+    "leverage": 2.0,
+    "slippage_percent": 0.03,
+    "timestamp": 1679529600,
+    "asset_price_at_open": 45000.0,
+    "fee": 0.25  # tx_fee (0.15) + network_fee (0.1)
+}</pre
         >
       </div>
 
@@ -687,8 +709,24 @@
         </ul>
         <h4>Output:</h4>
         <p>Position object or None if the operation fails.</p>
-        <code
-          >position = self.trading_helper.close_position("BTC", True, 50)</code
+        <h4>Example:</h4>
+        <pre>
+position = self.trading_helper.close_position("BTC", True, 50)
+print(position)
+# Output:
+{
+    "chain": "arbitrum",
+    "index_token_symbol": "BTC",
+    "collateral_token_symbol": "USDC",
+    "start_token_symbol": "USDC",
+    "is_long": true,
+    "size_delta_usd": 1000.0,  # Amount being closed (50% of 2000)
+    "leverage": 2.0,
+    "slippage_percent": 0.03,
+    "timestamp": 1679529600,
+    "asset_price_at_close": 46000.0,
+    "fee": 0.25,  # tx_fee (0.15) + network_fee (0.1)
+}</pre
         >
       </div>
 
@@ -697,7 +735,12 @@
         <p>Retrieves the current USD balance.</p>
         <h4>Output:</h4>
         <p>float</p>
-        <code>balance = self.trading_helper.get_usd_balance()</code>
+        <h4>Example:</h4>
+        <pre>
+balance = self.trading_helper.get_usd_balance()
+print(balance)
+# Output: 10500.75  # Current USD balance</pre
+        >
       </div>
 
       <div class="method">
@@ -705,7 +748,40 @@
         <p>Retrieves all open positions.</p>
         <h4>Output:</h4>
         <p>Dictionary of open positions</p>
-        <code>positions = self.trading_helper.get_open_positions()</code>
+        <h4>Example:</h4>
+        <pre>
+positions = self.trading_helper.get_open_positions()
+print(positions)
+# Output:
+{
+    "BTC_long": {
+        "chain": "arbitrum",
+        "index_token_symbol": "BTC",
+        "collateral_token_symbol": "USDC",
+        "start_token_symbol": "USDC",
+        "is_long": true,
+        "size_delta_usd": 2000.0,
+        "leverage": 2.0,
+        "slippage_percent": 0.03,
+        "timestamp": 1679529600,
+        "asset_price_at_open": 45000.0,
+        "fee": 0.25  # tx_fee (0.15) + network_fee (0.1)
+    },
+    "ETH_short": {
+        "chain": "arbitrum",
+        "index_token_symbol": "ETH",
+        "collateral_token_symbol": "USDC",
+        "start_token_symbol": "USDC",
+        "is_long": false,
+        "size_delta_usd": 1500.0,
+        "leverage": 3.0,
+        "slippage_percent": 0.03,
+        "timestamp": 1679529600,
+        "asset_price_at_open": 2800.0,
+        "fee": 0.25  # tx_fee (0.15) + network_fee (0.1)
+    }
+}</pre
+        >
       </div>
 
       <div class="method">
@@ -726,8 +802,37 @@
         </ul>
         <h4>Output:</h4>
         <p>List of dictionaries containing previous ticker data</p>
-        <code
-          >tickers = self.trading_helper.get_previous_tickers("BTC", 5)</code
+        <h4>Example:</h4>
+        <pre>
+tickers = self.trading_helper.get_previous_tickers("BTC", 2)
+print(tickers)
+# Output:
+[
+    {
+        "timestamp": 1679529600,
+        "open": 44950.0,
+        "high": 45100.0,
+        "low": 44900.0,
+        "close": 45000.0,
+        "volume": 125.5,
+        "quote_volume": 5647500.0,
+        "trades": 2450,
+        "taker_buy_base_volume": 75.3,
+        "taker_buy_quote_volume": 3388500.0
+    },
+    {
+        "timestamp": 1679529660,
+        "open": 45000.0,
+        "high": 45200.0,
+        "low": 44980.0,
+        "close": 45150.0,
+        "volume": 98.2,
+        "quote_volume": 4428090.0,
+        "trades": 1850,
+        "taker_buy_base_volume": 58.9,
+        "taker_buy_quote_volume": 2657385.0
+    }
+]</pre
         >
       </div>
 
@@ -758,25 +863,383 @@
         </li>
       </ul>
 
-      <h2 id="sample-algorithms">Sample Algorithms</h2>
       <div class="method">
-        <h3 id="simple-moving-average">Simple Moving Average</h3>
-        <code>
-          from interface import TradingInterface class MyAlgorithm: def
-          __init__(self, trading_interface: TradingInterface):
-          self.trading_interface = trading_interface self.prices = [] # Store
-          the last 5 prices def on_ticker_recd(self, ticker_data): current_price
-          = ticker_data["close"] # Fetch the current price
-          self.prices.append(current_price) # Add the new price to the list if
-          len(self.prices) > 5: self.prices.pop(0) if len(self.prices) == 5:
-          sma_5 = sum(self.prices) / 5 # Calculate 5 day average if
-          current_price > sma_5: self.trading_interface.buy(order_type="market")
-          else: self.trading_interface.sell(order_type="market") def
-          on_algo_start(self): print("Algorithm started") def
-          on_algo_stop(self): print("Algorithm stopped") def
-          on_order_success(self): print("Order was successful") def
-          on_order_error(self, error): print(f"Order was unsuccessful: {error}")
-        </code>
+        <h3 id="rsi">Relative Strength Index</h3>
+        <pre>
+class MyAlgorithm:
+    def __init__(self, trading_helper):
+        self.prices = []
+        self.trading_helper = trading_helper
+
+    def on_ticker_recd(self, ticker_data):
+        current_price = ticker_data["BTC"]["close"]
+        self.prices.append(current_price)
+
+        if len(self.prices) > 14:
+            self.prices.pop(0)
+
+        if len(self.prices) == 14:
+            gains = 0
+            losses = 0
+            for i in range(1, 14):
+                gains = gains +(max(0, self.prices[i] - self.prices[i - 1]))
+                losses = losses + (max(0, self.prices[i - 1] - self.prices[i]))
+            rsi = 100 - (100 / (1 + gains / losses))
+
+            # Open a long position if RSI < 30 (oversold)
+            if rsi < 30 :
+                self.trading_helper.close_position( 
+                    asset="ETH", 
+                    long=False, 
+                    position_percent_to_close=100, 
+                    slippage_percent=0.01 
+                )
+                balance = self.trading_helper.get_usd_balance()
+                self.trading_helper.open_position( 
+                    asset="ETH", 
+                    long=True, 
+                    collateral_usd=balance, 
+                    leverage=2, 
+                    slippage_percent=0.02 
+                )
+
+            # Open a short position if RSI > 70 (overbought)
+            elif rsi > 70:
+                self.trading_helper.close_position( 
+                    asset="ETH", 
+                    long=True, 
+                    position_percent_to_close=100, 
+                    slippage_percent=0.01 
+                )
+                balance = self.trading_helper.get_usd_balance()
+                self.trading_helper.open_position( 
+                    asset="ETH", 
+                    long=False, 
+                    collateral_usd=balance, 
+                    leverage=2, 
+                    slippage_percent=0.02
+                )
+
+    def on_algo_start(self):
+        pass
+
+    def on_algo_stop(self):
+        pass
+
+    def on_order_success(self):
+        pass
+
+    def on_order_error(self, error):
+        pass
+        </pre>
+      </div>
+
+      <div class="method">
+        <h3 id="macd">Moving Average Convergence Divergence</h3>
+        <pre>
+class MyAlgorithm:
+    def __init__(self, trading_helper):
+        self.prices = []
+        self.trading_helper = trading_helper
+        self.position_open = False
+
+    def on_ticker_recd(self, ticker_data):
+        current_price = ticker_data["BTC"]["close"]
+        self.prices.append(current_price)
+
+        if len(self.prices) >= 26:
+            # Calculate MACD and signal line
+            ema12 = sum(self.prices[-12:]) / 12
+            ema26 = sum(self.prices[-26:]) / 26
+            macd = ema12 - ema26
+            signal_line = sum(self.prices[-9:]) / 9
+            balance = self.trading_helper.get_usd_balance()
+            
+            # Determine leverage and collateral dynamically
+            macd_diff = abs(macd - signal_line)
+            leverage = 1 + min(4, macd_diff / 0.01)  # Max 5x
+            collateral_usd = balance * min(1, macd_diff / 0.05)  
+
+            if macd < signal_line and collateral_usd > 0:
+                # Open a short position if MACD goes below signal line
+                self.trading_helper.open_position(
+                    asset="BTC", 
+                    long=False, 
+                    collateral_usd=collateral_usd, 
+                    leverage=leverage, 
+                    slippage_percent=0.02
+                )
+                self.position_open = True
+
+            elif macd > signal_line and self.position_open:
+                self.trading_helper.close_position(
+                    asset="BTC", 
+                    long=False, 
+                    position_percent_to_close=100, 
+                    slippage_percent=0.01
+                )
+                self.position_open = False
+
+    def on_algo_start(self):
+        pass
+
+    def on_algo_stop(self):
+        pass
+
+    def on_order_success(self):
+        pass
+
+    def on_order_error(self, error):
+        pass
+        </pre>
+      </div>
+
+      <div class="method">
+        <h3 id="mac">Moving Average Crossover</h3>
+        <pre>
+class MyAlgorithm:
+    def __init__(self, trading_helper):
+        self.short_prices = []
+        self.long_prices = []
+        self.trading_helper = trading_helper
+
+    def on_ticker_recd(self, ticker_data):
+        current_price = ticker_data["ETH"]["close"]
+        self.short_prices.append(current_price)
+        self.long_prices.append(current_price)
+
+        # Maintain short and long windows (5 and 20 periods)
+        if len(self.short_prices) > 5:
+            self.short_prices.pop(0)
+        if len(self.long_prices) > 20:
+            self.long_prices.pop(0)
+
+        # Calculate moving averages
+        if len(self.short_prices) == 5 and len(self.long_prices) == 20:
+            sma_short = sum(self.short_prices) / 5
+            sma_long = sum(self.long_prices) / 20
+            balance = self.trading_helper.get_usd_balance()
+
+            # Buy if short-term MA crosses above long-term MA;
+            if sma_short > sma_long:
+                self.trading_helper.open_position(
+                    asset="ETH",
+                    long=True,
+                    collateral_usd=balance,
+                    leverage=1,
+                    slippage_percent=0.03,
+                )
+            elif sma_short < sma_long:
+                self.trading_helper.close_position(
+                    asset="ETH",
+                    long=True,
+                    position_percent_to_close=100,
+                    slippage_percent=0.01,
+                )
+    def on_algo_start(self):
+        pass
+
+    def on_algo_stop(self):
+        pass
+
+    def on_order_success(self):
+        pass
+
+    def on_order_error(self, error):
+        pass
+        </pre>
+      </div>
+
+      <div class="method">
+        <h3 id="pt">Pairs Trading</h3>
+        <pre>
+class MyAlgorithm:
+    def __init__(self, trading_helper):
+        self.spread_history = []
+        self.trading_helper = trading_helper
+        self.position_open = False
+        self.pair = ("BTC", "ETH")  # Example pair
+
+    def on_ticker_recd(self, ticker_data):
+        btc_price = ticker_data[self.pair[0]]["close"]
+        eth_price = ticker_data[self.pair[1]]["close"]
+
+        spread = btc_price / eth_price
+        self.spread_history.append(spread)
+
+        if len(self.spread_history) > 30:
+            self.spread_history.pop(0)
+
+        if len(self.spread_history) == 30:
+            avg_spread = sum(self.spread_history) / len(self.spread_history)
+            current_spread = self.spread_history[-1]
+            balance = self.trading_helper.get_usd_balance()
+            collateral_usd = balance * 0.25
+            leverage = 2
+
+            if current_spread > avg_spread * 1.05 and not self.position_open:
+                self.trading_helper.open_position(
+                    asset=self.pair[0],
+                    long=False,
+                    collateral_usd=collateral_usd,
+                    leverage=leverage,
+                    slippage_percent=0.02,
+                )
+                self.trading_helper.open_position(
+                    asset=self.pair[1],
+                    long=True,
+                    collateral_usd=collateral_usd,
+                    leverage=leverage,
+                    slippage_percent=0.02,
+                )
+                self.position_open = True
+
+            elif current_spread < avg_spread * 0.95 and not self.position_open:
+                self.trading_helper.open_position(
+                    asset=self.pair[0],
+                    long=True,
+                    collateral_usd=collateral_usd,
+                    leverage=leverage,
+                    slippage_percent=0.02,
+                )
+                self.trading_helper.open_position(
+                    asset=self.pair[1],
+                    long=False,
+                    collateral_usd=collateral_usd,
+                    leverage=leverage,
+                    slippage_percent=0.02,
+                )
+                self.position_open = True
+
+            elif avg_spread * 0.98 < current_spread < avg_spread * 1.02:
+                if self.position_open: 
+                    self.trading_helper.close_position(
+                        asset=self.pair[0],
+                        long=(current_spread < avg_spread),
+                        position_percent_to_close=100,
+                        slippage_percent=0.01,
+                    )
+                    self.trading_helper.close_position(
+                        asset=self.pair[1],
+                        long=(current_spread > avg_spread),
+                        position_percent_to_close=100,
+                        slippage_percent=0.01,
+                    )
+                    self.position_open = False
+    def on_algo_start(self):
+        pass
+
+    def on_algo_stop(self):
+        pass
+
+    def on_order_success(self):
+        pass
+
+    def on_order_error(self, error):
+        pass
+        </pre>
+      </div>
+
+      <div class="method">
+        <h3 id="bb">Bollinger Bands</h3>
+        <pre>
+class MyAlgorithm:
+    def __init__(self, trading_helper):
+        self.prices = []
+        self.trading_helper = trading_helper
+        self.open = False
+        self.long = None
+
+    def on_ticker_recd(self, ticker_data):
+        current_price = ticker_data["BTC"]["close"]
+        self.prices.append(current_price)
+
+        if len(self.prices) > 20:
+            self.prices.pop(0)
+
+        if len(self.prices) == 20:
+            # Calculate Bollinger Bands
+            avg_price = sum(self.prices) / 20
+            std_dev = (sum((p - avg_price)**2 for p in self.prices)/20)**0.5
+            upper_band = avg_price + (2 * std_dev)
+            lower_band = avg_price - (2 * std_dev)
+            balance = self.trading_helper.get_usd_balance()
+
+            if current_price > upper_band:
+                # Open a short position if price breaks above upper band
+                if not self.open or self.long:
+                    if self.long:
+                        # Close any existing long position
+                        self.trading_helper.close_position(
+                            asset="BTC", 
+                            long=True, 
+                            position_percent_to_close=100, 
+                            slippage_percent=0.01
+                        )
+                    # Open a short position
+                    self.trading_helper.open_position(
+                        asset="BTC", 
+                        long=False, 
+                        collateral_usd=balance / 3, 
+                        leverage=2, 
+                        slippage_percent=0.02
+                    )
+                    self.open = True
+                    self.long = False
+
+            elif current_price < lower_band:
+                # Open a long position if price drops below lower band
+                if not self.open or not self.long:
+                    if self.open and not self.long:
+                        # Close any existing short position
+                        self.trading_helper.close_position(
+                            asset="BTC", 
+                            long=False, 
+                            position_percent_to_close=100, 
+                            slippage_percent=0.01
+                        )
+                    # Open a long position
+                    self.trading_helper.open_position(
+                        asset="BTC", 
+                        long=True, 
+                        collateral_usd=balance / 3, 
+                        leverage=2, 
+                        slippage_percent=0.02
+                    )
+                    self.open = True
+                    self.long = True
+
+            elif current_price > avg_price and self.open and not self.long:
+                # Close short if price reverts to the mean after upper breakout
+                self.trading_helper.close_position(
+                    asset="BTC", 
+                    long=False, 
+                    position_percent_to_close=100, 
+                    slippage_percent=0.01
+                )
+                self.open = False
+
+            elif current_price < avg_price and self.open and self.long:
+                # Close long if price reverts to the mean after lower breakout
+                self.trading_helper.close_position(
+                    asset="BTC", 
+                    long=True, 
+                    position_percent_to_close=100, 
+                    slippage_percent=0.01
+                )
+                self.open = False
+    def on_algo_start(self):
+        pass
+
+    def on_algo_stop(self):
+        pass
+
+    def on_order_success(self):
+        pass
+
+    def on_order_error(self, error):
+        pass
+        </pre>
       </div>
     </div>
     <div class="libraries">
